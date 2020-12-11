@@ -1,9 +1,9 @@
 # 3695 Final - Tristan Priestley - A01089705
 
-Navigate to the project directory.
-Run `npm i` to install the required node modules.
-Run `npm start` to start the Apollo Server.
-By default, the server will run on `PORT=5050`.
+Navigate to the project directory.  
+Run `npm i` to install the required node modules.  
+Run `npm start` to start the Apollo Server.  
+By default, the server will run on `PORT=5050`.  
 
 1. **Return all users**
 ```
