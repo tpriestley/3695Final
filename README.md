@@ -1,6 +1,9 @@
 # 3695 Final - Tristan Priestley - A01089705
 
-Run `npm i` to install the required node modules, `npm start` to start the Apollo Server.
+Navigate to the project directory.
+Run `npm i` to install the required node modules.
+Run `npm start` to start the Apollo Server.
+By default, the server will run on `PORT=5050`.
 
 1. **Return all users**
 ```
@@ -42,8 +45,9 @@ query {
 ```
 mutation {
     createPost(id: 4, topic:"Went surfing", 
-      category:"recreation", body:"The waves were great!",
-    	createdBy:"Tristan"){
+    category:"recreation", body:"The waves were great!",
+    createdBy:"Tristan")
+    {
         id
         topic
     		category
@@ -57,8 +61,9 @@ mutation {
 ```
 mutation {
     createComment(id: 5, parentId:"3",
-      body:"That looks great!",
-    	createdBy:"Tristan"){
+    body:"That looks great!",
+    createdBy:"Tristan")
+    {
         id
     		parentId
         body
@@ -70,8 +75,9 @@ mutation {
 6. **Create a response**
 ```
 mutation {
-    createResponse(id: 5,
-      responses:"That looks great!"){
+    createResponse(id: 5, 
+    responses:"That looks great!")
+    {
         id
     		responses
     }
