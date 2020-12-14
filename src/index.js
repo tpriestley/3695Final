@@ -1,83 +1,20 @@
 import apolloServer from 'apollo-server'
-import { users } from './data/users.js'
-import { posts } from './data/posts.js'
-import { comments } from './data/comments.js'
+import mongoose from 'mongoose'
+import { typeDefs } from './models/typeDefs.js'
+import { resolvers } from './models/resolvers.js'
 
-const { ApolloServer, gql } = apolloServer
+const { ApolloServer } = apolloServer
 
-const typeDefs = gql`
-    type User {
-        id: ID!
-        name: String!
-    }
+const start = async () => {
 
-    type Post {
-        id: ID!
-        topic: String!
-        category: String!
-        body: String!
-        comments: [String]
-        createdBy: String!
-    }
+    await mongoose.connect("mongodb+srv://dbUser:P@ssw0rd@graphql-api.1a5w5.mongodb.net/graphqlNotes?retryWrites=true&w=majority", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
 
-    type Comment {
-        id: ID!
-        parentId: String!
-        body: String!
-        responses: [String]
-        createdBy: String!
-    }
-    
-    type Query {
-        users: [User]
-        posts: [Post]
-        comments: [Comment]
-        postById(id: ID): [Post]
-        postByCategory(category: String): [Post]
-    }
+    const server = new ApolloServer({typeDefs, resolvers})
+    server.listen({port: 4000}).then(({url}) => console.log(`server running at ${url}`))
 
-    type Mutation {
-        createPost(id: ID!, topic: String!, category: String!, body: String!, createdBy: String!): Post!
-        createComment(id: ID!, parentId: String!, body: String!, createdBy: String!): Comment!
-        createResponse(id: ID!, responses: [String]): Comment!
-    }
-`
-
-const resolvers = {
-    Query: {
-        users: () => users,
-        posts: () => posts,
-        comments: () => comments,
-
-        postById: (_, { id }) => {
-            const results = posts.filter(posts => posts.id == id)
-            return results
-        },
-            
-        postByCategory: (_, { category }) => {
-            const results = posts.filter(posts => posts.category == category)
-            return results
-        }
-    },
-    Mutation: {
-        createPost: (_, {id, topic, category, body, createdBy}) => {
-            const newPost = ({id, topic, category, body, createdBy})
-            posts.push(newPost)
-            return newPost
-        },
-
-        createComment: (_, {id, parentId, body, createdBy}) => {
-            const newComment = ({id, parentId, body, createdBy})
-            comments.push(newComment)
-            return newComment
-        },
-        createResponse: (_, {id, responses}) => {
-            const newResponse = ({id, responses})
-            comments.push(newResponse)
-            return newResponse
-        }
-    }
 }
 
-const server = new ApolloServer({typeDefs, resolvers})
-server.listen({port: 4000}).then(({url}) => console.log(`server running at ${url}`))
+start()
